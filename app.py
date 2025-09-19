@@ -1,4 +1,4 @@
-from flask import Flask, g, request, jsonify
+from flask import Flask, g, request, jsonify, render_template
 import sqlite3
 
 app = Flask(__name__)
@@ -17,12 +17,13 @@ def close_db(exception):
     db = g.pop("db", None)
     if db is not None:
         db.close()
+
 # صفحه ی اصلی 
 @app.route("/")
 def index():
-    return {"message": "Flask API is running!"}
+    return {"message": "فلسک ران میشه "}
 
-# route کاربران با فیلتر
+# مسیر کاربران با فیلتر
 @app.route("/users", methods=["GET"])
 def get_users():
     db = get_db()
@@ -47,7 +48,7 @@ def get_users():
         params.append(f"%{skill}%")
 
     # فیلتر بر اساس لوکیشن
-    location = request.args.get("locarion")
+    location = request.args.get("location")
     if location:
         query += " AND u.location LIKE ?"
         params.append(f"%{location}%")
@@ -59,6 +60,30 @@ def get_users():
 
     return jsonify(users)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# مسیر پروفایل فریلنسر
+@app.route("/freelancers/<int:id>")
+def freelancer_profile(id):
+    db = get_db()
 
+    # اطلاعات کاربر و مهارت‌ها
+    user = db.execute("""
+        SELECT u.*, GROUP_CONCAT(s.skill, ', ') AS skills
+        FROM users u
+        LEFT JOIN skills s ON u.id = s.user_id
+        WHERE u.id = ?
+        GROUP BY u.id
+    """, (id,)).fetchone()
+
+    if user is None:
+        return "کاربر پیدا نشد", 404
+
+    # نمونه‌کارها
+    portfolios = db.execute("""
+        SELECT * FROM portfolios WHERE user_id = ?
+    """, (id,)).fetchall()
+
+    return render_template("profile.html", user=user, portfolios=portfolios)
+
+
+if name == "__main__":
+    app.run(debug=True)
