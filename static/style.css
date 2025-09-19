@@ -39,6 +39,14 @@
     font-style: normal;		
 }
 
+@font-face {
+	font-family: "bon-black";
+	src: url(../static/fonts/bon-Black.woff),   
+	url(../static/fonts/bon-Black.woff);
+    font-weight: normal;
+    font-style: normal;		
+}
+
 
 h1,h2,h3,h3,h4,h5,h6,p
 {
@@ -53,10 +61,10 @@ body
 }
 
 
-header
+/* header
 {
-    /* background-color: #fff; */
-}
+    background-color: #fff;
+} */
 
 button,a
 {
@@ -86,10 +94,10 @@ button,a
     gap: 10px;
 }
 
-.logo
+/* .logo
 {
-    /* background-color: #f41919; */
-}
+    background-color: #f41919;
+} */
 
 .logo-img
 {
@@ -268,7 +276,7 @@ footer
     border-radius: 50px;
     margin: 200px 100px 30px 100px;
     padding: 50px 70px 10px 70px;
-    color: aliceblue;
+    color: #E9F1F7;
 }
 
 /* .links-footer
@@ -416,9 +424,9 @@ footer
     .logo-highlight
     {
     position: absolute;
-    transform: translate(-50%, 175%);
+    transform: translate(-50%, 50%);
     width: 100px;
-    /* top: 1230px; */
+    top: 9pc;
     left: 50%;
     }
 
@@ -590,4 +598,116 @@ footer
     padding-right: 1.2vw;
     line-height: 5vw;
 
+}
+
+.active-ups
+{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    gap: 10vw;
+}
+
+.user-project-safe
+{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #021B3A;
+    border-radius: 2vw;
+    margin-top: 15vw;
+}
+
+.ups-num
+{
+    background-color: #00142D;
+    color: #E9F1F7;
+    font-family: colak;
+    font-size: 3vw;
+    border-radius: 1vw;
+    position: absolute;
+    padding: 0.3vw 1.5vw 0vw 1vw;
+    bottom: 6.5vw;
+}
+.ups-text
+{
+    padding:2vw 2.5vw 0px 2.5vw;
+    font-family: bon-black;
+    font-size: 2vw;
+    text-align: center;
+    color: #476CFF;
+
+}
+
+.ups2
+{
+    order: 0;
+}
+.ups3
+{
+    order: 1;
+}
+.ups1
+{
+    order: 2;
+}
+
+.line1
+{
+    position: absolute;
+    top: 20vw;
+    width: 75vw;
+}
+
+@media screen and (max-width: 750px)
+{
+    .user-project-safe
+{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #021B3A;
+    border-radius: 3vw;
+    margin-top: 15vw;
+}
+    .active-ups
+{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    gap: 7vw;
+}
+    .line1
+{
+    display: none;
+    position: absolute;
+    top: 20vw;
+    /* right: 4.5vw; */
+    width: 98vw;
+}
+.ups-num
+{
+    background-color: #00142D;
+    color: #E9F1F7;
+    font-family: colak;
+    font-size: 6vw;
+    border-radius: 1vw;
+    position: absolute;
+    padding: 0.3vw 1.5vw 0vw 1vw;
+    height: 37px;
+    bottom: 10vw;
+}
+.ups-text
+{
+    padding:2vw 2.5vw 0px 2.5vw;
+    font-family: bon-black;
+    font-size: 3.5vw;
+    text-align: center;
+    color: #476CFF;
+
+}
 }
