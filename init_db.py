@@ -7,6 +7,7 @@ SEED_FILE = "seed.sql"
 
 def create_database():
     """Create database, tables from schema.sql, and insert seed data from seed.sql"""
+    # باز کردن connection
     connection = sqlite3.connect(DB_PATH)
     try:
         # اجرای schema
