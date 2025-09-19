@@ -1,42 +1,48 @@
 import sqlite3
 import os
 
-# Database path and SQL files
 DB_PATH = "database.db"
 SCHEMA_FILE = "schema.sql"
 SEED_FILE = "seed.sql"
 
 def create_database():
-    """Create database, tables from schema.sql, and insert seed data from seed.sql"""
-
-    # Delete old database if exists to avoid UNIQUE constraint errors
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
         print("Old database deleted!")
 
-    connection = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
     try:
-        # Execute schema.sql to create tables
-        with open(SCHEMA_FILE, "r") as file:
-            sql_script = file.read()
-        connection.executescript(sql_script)
+        conn.execute("PRAGMA foreign_keys = ON;")  # فعال‌سازی Foreign Key
+
+        # 1️⃣ Create tables
+        with open(SCHEMA_FILE, "r", encoding="utf-8") as f:
+            conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # Execute seed.sql to insert initial data
-        with open(SEED_FILE, "r") as file:
-            seed_script = file.read()
-        connection.executescript(seed_script)
-        print("Seed data inserted successfully!")
+        # 2️⃣ Insert users first
+        with open(SEED_FILE, "r", encoding="utf-8") as f:
+            lines = f.read().split(";")
+            for line in lines:
+                line = line.strip()
+                if line.startswith("INSERT INTO users"):
+                    conn.execute(line)
+        conn.commit()  # 🔹 حتما commit کنیم تا id ها موجود باشن
+        print("Users inserted successfully!")
 
-        connection.commit()
-    except sqlite3.IntegrityError as e:
-        print("IntegrityError:", e)
+        # 3️⃣ Insert skills
+        for line in lines:
+            line = line.strip()
+            if line.startswith("INSERT INTO skills"):
+                conn.execute(line)
+        conn.commit()
+        print("Skills inserted successfully!")
+
     except Exception as e:
         print("Error:", e)
     finally:
-        connection.close()
+        conn.close()
 
-    print("✅ Database ready with tables and seed data!")
+    print("✅ Database ready with tables, users, and skills!")
 
 if __name__ == "__main__":
     create_database()
