@@ -52,7 +52,7 @@ html {
 }
 
 
-h1,h2,h3,h3,h4,h5,h6,p,a
+h1,h2,h3,h3,h4,h5,h6,p,a,input,select,option
 {
     font-family: bon;
     
@@ -72,7 +72,7 @@ body
     background-color: #fff;
 } */
 
-button,a
+button,a,select
 {
     transition: all 0.2s ease;
 }
@@ -784,10 +784,133 @@ footer
 {
     display: flex;
     justify-content: center;
+    background: url(../static/background/bg.png) no-repeat;
+    background-position: center;
+    background-size:cover;
 }
-.login-box
+.gerister-box
+{
+    display: flex;
+    gap: 2vw;
+    flex-direction: column;
+    align-items: center;
+    margin: 2vw 5vw 0vw 5vw;
+    padding: 2.5vw 2vw;
+    background-color: #00072d57;
+    border-radius: 1.5vw;
+    border: solid #d9d9d910;
+    width: 20vw;
+
+    backdrop-filter: blur(100);
+    /* height: 30vw; */
+    
+}
+
+.input-user
+{
+    width: 20vw;    
+    height: 2vw;
+    padding: 0.5vw;
+    border-radius: 0.5vw;
+    background-color: #00142D;
+    color: #C2C8E8;
+    border: none;
+    font-family: bon-semibold;
+    padding-right: 1vw;
+}
+.input-user::placeholder
+{
+    color: #616582;
+}
+
+.input-user:focus
+{
+    outline: none;
+}
+
+.rigester-text
+{
+    color: #C2C8E8;
+    font-family: bon-extrabold;
+    font-size:xx-large;
+}
+select
+{
+    background-color: #00142D;
+    color: #616582;
+    border-radius: 0.5vw;
+    padding: 1vw;
+
+    border: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+
+}
+
+option
+{
+    color: #C2C8E8;
+}
+
+.select-box
+{
+    display: flex;
+    gap: 1vw;
+}
+
+#city
+{
+    width: 4.4vw;
+}
+
+#hesab
+{
+    display: none;
+}
+
+select:hover
+{
+    background-color: #021935;
+}
+.ostan
+{
+    display: none;
+    /* direction:unset; */
+}
+
+.register-cantiner
 {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    margin-bottom: 2vw;
 }
+
+.gerister-button
+{
+    color: white;
+    background-color: #476CFF;
+    padding: 0.5vw 2vw;
+    border-radius: 0.5vw;
+    font-size: 1.5vw;
+}
+
+.login-page-text
+{
+    color: #616582;
+}
+
+.login-page-linke
+{
+    color: #476CFF;
+}
+
+.gerister-button:hover
+{
+    background-color: #6a88ff;
+    transform: scale(1.05);
+}
+
