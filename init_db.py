@@ -5,6 +5,18 @@ DB_PATH = "database.db"
 SCHEMA_FILE = "schema.sql"
 SEED_FILE = "seed.sql"
 
+# تعریف مهارت‌ها
+USER_SKILLS = {
+    'negin': ['Python', 'Flask', 'Django'],
+    'sadra': ['Python', 'Database', 'Pandas'],
+    'ali': ['Excel', 'SQL', 'Data Visualization'],
+    'sajjad': ['Project Management'],
+    'majid': ['Leadership'],
+    'radman': ['Database Design', 'SQL'],
+    'ronika': ['Backend Development', 'Python'],
+    'sedigh': ['Frontend Development', 'HTML/CSS/JS']
+}
+
 def create_database():
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
@@ -12,28 +24,28 @@ def create_database():
 
     conn = sqlite3.connect(DB_PATH)
     try:
-        conn.execute("PRAGMA foreign_keys = ON;")  # فعال‌سازی Foreign Key
+        conn.execute("PRAGMA foreign_keys = ON;")
 
-        # 1️⃣ Create tables
+        # ایجاد جداول
         with open(SCHEMA_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # 2️⃣ Insert users first
+        # اضافه کردن کاربران
         with open(SEED_FILE, "r", encoding="utf-8") as f:
-            lines = f.read().split(";")
-            for line in lines:
-                line = line.strip()
-                if line.startswith("INSERT INTO users"):
-                    conn.execute(line)
-        conn.commit()  # 🔹 حتما commit کنیم تا id ها موجود باشن
+            conn.executescript(f.read())
         print("Users inserted successfully!")
 
-        # 3️⃣ Insert skills
-        for line in lines:
-            line = line.strip()
-            if line.startswith("INSERT INTO skills"):
-                conn.execute(line)
+        # اضافه کردن مهارت‌ها با Python
+        cursor = conn.cursor()
+        for username, skills in USER_SKILLS.items():
+            cursor.execute("SELECT id FROM users WHERE username=?", (username,))
+            user_id = cursor.fetchone()[0]
+            for skill in skills:
+                cursor.execute(
+                    "INSERT INTO skills (user_id, skill) VALUES (?, ?)",
+                    (user_id, skill)
+                )
         conn.commit()
         print("Skills inserted successfully!")
 
@@ -42,7 +54,7 @@ def create_database():
     finally:
         conn.close()
 
-    print("✅ Database ready with tables, users, and skills!")
+    print("✅ Database ready with users and skills!")
 
 if __name__ == "__main__":
     create_database()
