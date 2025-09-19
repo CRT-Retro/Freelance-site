@@ -854,6 +854,19 @@ option
     color: #C2C8E8;
 }
 
+/* select option {
+  scrollbar-width: none; برای فایرفاکس
+}
+
+select option::-webkit-scrollbar {
+  display: none; برای کروم و سافاری
+} */
+
+::-webkit-scrollbar {
+  width: 10px;              /* عرض اسکرول‌بار */
+  height: 10px;             /* برای اسکرول افقی */
+}
+
 .select-box
 {
     display: flex;
