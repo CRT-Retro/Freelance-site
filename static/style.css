@@ -779,3 +779,15 @@ footer
     border-radius: 1vw;
     color: #E9F1F7;
 }
+
+#login-page
+{
+    display: flex;
+    justify-content: center;
+}
+.login-box
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
