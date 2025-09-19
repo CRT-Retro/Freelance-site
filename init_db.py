@@ -4,8 +4,9 @@ import os
 DB_PATH = "database.db"
 SCHEMA_FILE = "schema.sql"
 SEED_FILE = "seed.sql"
+VIEWS_INDEXES_FILE = "views_indexes.sql"
 
-# تعریف مهارت‌ها
+# مهارت‌ها برای هر کاربر
 USER_SKILLS = {
     'negin': ['Python', 'Flask', 'Django'],
     'sadra': ['Python', 'Database', 'Pandas'],
@@ -26,21 +27,25 @@ def create_database():
     try:
         conn.execute("PRAGMA foreign_keys = ON;")
 
-        # ایجاد جداول
+        # 1️⃣ ایجاد جداول
         with open(SCHEMA_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # اضافه کردن کاربران
+        # 2️⃣ اضافه کردن کاربران
         with open(SEED_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Users inserted successfully!")
 
-        # اضافه کردن مهارت‌ها با Python
+        # 3️⃣ اضافه کردن مهارت‌ها
         cursor = conn.cursor()
         for username, skills in USER_SKILLS.items():
             cursor.execute("SELECT id FROM users WHERE username=?", (username,))
-            user_id = cursor.fetchone()[0]
+            row = cursor.fetchone()
+            if row is None:
+                print(f"Warning: user {username} not found!")
+                continue
+            user_id = row[0]
             for skill in skills:
                 cursor.execute(
                     "INSERT INTO skills (user_id, skill) VALUES (?, ?)",
@@ -49,12 +54,17 @@ def create_database():
         conn.commit()
         print("Skills inserted successfully!")
 
+        # 4️⃣ ایجاد View و Index
+        with open(VIEWS_INDEXES_FILE, "r", encoding="utf-8") as f:
+            conn.executescript(f.read())
+        print("Views and indexes created successfully!")
+
     except Exception as e:
         print("Error:", e)
     finally:
         conn.close()
 
-    print("✅ Database ready with users and skills!")
+    print("✅ Database ready with users, skills, views, and indexes!")
 
 if __name__ == "__main__":
     create_database()
