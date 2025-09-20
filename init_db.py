@@ -1,6 +1,7 @@
 import sqlite3
 import os
 
+# مسیر دیتابیس و فایل‌ها
 DB_PATH = "database.db"
 SCHEMA_FILE = "schema.sql"
 SEED_FILE = "seed.sql"
@@ -19,9 +20,12 @@ USER_SKILLS = {
 }
 
 def create_database():
+    # حذف دیتابیس قدیمی
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
         print("Old database deleted!")
+    else:
+        print("No old database found, creating a new one...")
 
     conn = sqlite3.connect(DB_PATH)
     try:
@@ -32,29 +36,27 @@ def create_database():
             conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # 2️⃣ اضافه کردن کاربران
+        # 2️⃣ درج کاربران
         with open(SEED_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Users inserted successfully!")
 
-        # 3️⃣ اضافه کردن مهارت‌ها
+        # 3️⃣ درج مهارت‌ها
         cursor = conn.cursor()
         for username, skills in USER_SKILLS.items():
             cursor.execute("SELECT id FROM users WHERE username=?", (username,))
-            row = cursor.fetchone()
-            if row is None:
-                print(f"Warning: user {username} not found!")
-                continue
-            user_id = row[0]
-            for skill in skills:
-                cursor.execute(
-                    "INSERT INTO skills (user_id, skill) VALUES (?, ?)",
-                    (user_id, skill)
-                )
+            result = cursor.fetchone()
+            if result:
+                user_id = result[0]
+                for skill in skills:
+                    cursor.execute(
+                        "INSERT INTO skills (user_id, skill) VALUES (?, ?)",
+                        (user_id, skill)
+                    )
         conn.commit()
         print("Skills inserted successfully!")
 
-        # 4️⃣ ایجاد View و Index
+        # 4️⃣ ایجاد View و Indexes
         with open(VIEWS_INDEXES_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Views and indexes created successfully!")
