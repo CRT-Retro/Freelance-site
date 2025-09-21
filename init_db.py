@@ -1,8 +1,6 @@
 import sqlite3
 import os
-import re
 
-# مسیر دیتابیس و فایل‌ها
 DB_PATH = "database.db"
 SCHEMA_FILE = "schema.sql"
 SEED_FILE = "seed.sql"
@@ -17,26 +15,11 @@ USER_SKILLS = {
     'majid': ['Leadership'],
     'radman': ['Database Design', 'SQL'],
     'ronika': ['Backend Development', 'Python'],
-    'sedigh': ['Frontend Development', 'HTML/CSS/JS']
+    'sedigh': ['Frontend Development', 'HTML/CSS/JS'],
+    'mohammad': ['Python', 'Data Analysis']
 }
 
-# ------------------ Validation Helpers ------------------
-def validate_email(email: str) -> bool:
-    """Check if email format is valid using regex"""
-    pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
-    return re.match(pattern, email) is not None
-
-def validate_username(username: str) -> bool:
-    """Username must be at least 3 chars and no spaces"""
-    return len(username) >= 3 and " " not in username
-
-def validate_password(password: str) -> bool:
-    """Password must be at least 6 characters"""
-    return len(password) >= 6
-# --------------------------------------------------------
-
 def create_database():
-    # حذف دیتابیس قدیمی
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
         print("Old database deleted!")
@@ -57,19 +40,8 @@ def create_database():
             conn.executescript(f.read())
         print("Users inserted successfully!")
 
-        # 🔍 اعتبارسنجی داده‌های درج‌شده
-        cursor = conn.cursor()
-        cursor.execute("SELECT id, username, email, password_hash FROM users")
-        for user_id, username, email, password in cursor.fetchall():
-            if not validate_username(username):
-                raise ValueError(f"❌ Invalid username: {username}")
-            if not validate_email(email):
-                raise ValueError(f"❌ Invalid email: {email}")
-            if not validate_password(password):
-                raise ValueError(f"❌ Invalid password for user {username}")
-        print("✅ All users validated successfully!")
-
         # 3️⃣ درج مهارت‌ها
+        cursor = conn.cursor()
         for username, skills in USER_SKILLS.items():
             cursor.execute("SELECT id FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
@@ -83,13 +55,10 @@ def create_database():
         conn.commit()
         print("Skills inserted successfully!")
 
-        # 4️⃣ ایجاد View و Indexes
-        if os.path.exists(VIEWS_INDEXES_FILE):
-            with open(VIEWS_INDEXES_FILE, "r", encoding="utf-8") as f:
-                conn.executescript(f.read())
-            print("Views and indexes created successfully!")
-        else:
-            print("⚠️ No views_indexes.sql file found, skipped.")
+        # 4️⃣ ایجاد View و Index
+        with open(VIEWS_INDEXES_FILE, "r", encoding="utf-8") as f:
+            conn.executescript(f.read())
+        print("Views and indexes created successfully!")
 
     except Exception as e:
         print("Error:", e)
