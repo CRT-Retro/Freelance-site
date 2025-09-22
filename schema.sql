@@ -4,12 +4,13 @@ CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     email TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
+    password_hash TEXT NOT NULL CHECK(length(password_hash) >= 8),
     role TEXT NOT NULL DEFAULT 'freelancer' CHECK (role IN ('freelancer','employer','admin')),
     photo TEXT,
     job_title TEXT,
     location TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CHECK(email LIKE '%_@__%.__%')
 );
 
 CREATE TABLE IF NOT EXISTS skills (
@@ -17,7 +18,8 @@ CREATE TABLE IF NOT EXISTS skills (
     user_id INTEGER NOT NULL,
     skill TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(user_id, skill)
 );
 
 CREATE TABLE IF NOT EXISTS portfolios (
@@ -47,10 +49,10 @@ CREATE TABLE IF NOT EXISTS reviews (
     comment TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(reviewer_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(reviewed_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY(reviewed_id) REFERENCES users(id) ON DELETE CASCADE,
+    CHECK(reviewer_id != reviewed_id)
 );
 
--- جدول جدید برای Favorites
 CREATE TABLE IF NOT EXISTS favorites (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
@@ -58,10 +60,11 @@ CREATE TABLE IF NOT EXISTS favorites (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY(favorite_user_id) REFERENCES users(id) ON DELETE CASCADE,
-    UNIQUE(user_id, favorite_user_id)
+    UNIQUE(user_id, favorite_user_id),
+    CHECK(user_id != favorite_user_id)
 );
 
--- helpful indexes
+-- Indexها
 CREATE UNIQUE INDEX IF NOT EXISTS idx_skills_user_skill ON skills(user_id, skill);
 CREATE INDEX IF NOT EXISTS idx_portfolios_user ON portfolios(user_id);
 CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);
