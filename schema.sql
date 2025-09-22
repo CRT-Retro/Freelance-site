@@ -39,8 +39,22 @@ CREATE TABLE IF NOT EXISTS messages (
     FOREIGN KEY(receiver_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- جدول جدید برای Reviews
+CREATE TABLE IF NOT EXISTS reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reviewer_id INTEGER NOT NULL,
+    reviewed_id INTEGER NOT NULL,
+    rating INTEGER NOT NULL CHECK(rating BETWEEN 1 AND 5),
+    comment TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(reviewer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(reviewed_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- helpful indexes
 CREATE UNIQUE INDEX IF NOT EXISTS idx_skills_user_skill ON skills(user_id, skill);
 CREATE INDEX IF NOT EXISTS idx_portfolios_user ON portfolios(user_id);
 CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);
 CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_reviewer ON reviews(reviewer_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_reviewed ON reviews(reviewed_id);

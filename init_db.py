@@ -17,20 +17,25 @@ USER_SKILLS = {
     'radman': ['Database Design', 'SQL'],
     'ronika': ['Backend Development', 'Python'],
     'sedigh': ['Frontend Development', 'HTML/CSS/JS'],
-    'mohammad': ['Python', 'SQL']  # مثال مهارت برای کاربر جدید
+    'mohammad': ['Python', 'SQL']
 }
+
+# نمونه داده برای Reviews
+SAMPLE_REVIEWS = [
+    ('negin', 'sadra', 5, 'Great teamwork!'),
+    ('ali', 'mohammad', 4, 'Good collaboration.'),
+    ('sajjad', 'majid', 3, 'Average performance.'),
+    ('radman', 'ronika', 5, 'Excellent skills!')
+]
 
 def load_seed_users(file_path):
     """Load users from seed.sql and return as list of dicts."""
     users = []
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    # جدا کردن هر خط INSERT
     insert_statements = [stmt.strip() for stmt in content.split('VALUES') if stmt.strip()]
     if len(insert_statements) > 1:
-        values_part = insert_statements[1]
-        # حذف پرانتزهای اضافی و ; آخر
-        values_part = values_part.strip().rstrip(';')
+        values_part = insert_statements[1].strip().rstrip(';')
         entries = values_part.split('),')
         for entry in entries:
             entry = entry.replace('(', '').replace(')', '').replace("'", "")
@@ -89,7 +94,20 @@ def create_database():
         conn.commit()
         print("Skills inserted successfully!")
 
-        # 4️⃣ ایجاد View و Index
+        # 4️⃣ درج نمونه review
+        for reviewer_name, reviewed_name, rating, comment in SAMPLE_REVIEWS:
+            cursor.execute("SELECT id FROM users WHERE username=?", (reviewer_name,))
+            reviewer_id = cursor.fetchone()[0]
+            cursor.execute("SELECT id FROM users WHERE username=?", (reviewed_name,))
+            reviewed_id = cursor.fetchone()[0]
+            cursor.execute(
+                "INSERT INTO reviews (reviewer_id, reviewed_id, rating, comment) VALUES (?, ?, ?, ?)",
+                (reviewer_id, reviewed_id, rating, comment)
+            )
+        conn.commit()
+        print("Sample reviews inserted successfully!")
+
+        # 5️⃣ ایجاد View و Index
         with open(VIEWS_INDEXES_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Views and indexes created successfully!")
@@ -99,7 +117,7 @@ def create_database():
     finally:
         conn.close()
 
-    print("✅ Database ready with users, skills, views, and indexes!")
+    print("✅ Database ready with users, skills, reviews, views, and indexes!")
 
 if __name__ == "__main__":
     create_database()

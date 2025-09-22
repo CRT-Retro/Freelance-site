@@ -8,6 +8,14 @@ SELECT u.id AS user_id,
 FROM users u
 LEFT JOIN skills s ON u.id = s.user_id;
 
+-- View برای میانگین امتیاز کاربران
+CREATE VIEW IF NOT EXISTS user_avg_rating_view AS
+SELECT reviewed_id AS user_id,
+       AVG(rating) AS avg_rating,
+       COUNT(*) AS total_reviews
+FROM reviews
+GROUP BY reviewed_id;
+
 -- Index برای جستجوی سریع روی نام کاربر
 CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 
