@@ -16,10 +16,11 @@ USER_SKILLS = {
     'radman': ['Database Design', 'SQL'],
     'ronika': ['Backend Development', 'Python'],
     'sedigh': ['Frontend Development', 'HTML/CSS/JS'],
-    'mohammad': ['Python', 'Data Analysis']
+    'mohammad': ['Python', 'SQL']  # مثال مهارت برای کاربر جدید
 }
 
 def create_database():
+    # حذف دیتابیس قدیمی
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
         print("Old database deleted!")
@@ -35,12 +36,12 @@ def create_database():
             conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # 2️⃣ درج کاربران
+        # 2️⃣ درج کاربران از seed.sql
         with open(SEED_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Users inserted successfully!")
 
-        # 3️⃣ درج مهارت‌ها
+        # 3️⃣ درج مهارت‌ها با Python
         cursor = conn.cursor()
         for username, skills in USER_SKILLS.items():
             cursor.execute("SELECT id FROM users WHERE username=?", (username,))
