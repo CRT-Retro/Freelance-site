@@ -13,50 +13,77 @@
     <div class="register-cantiner">
         <div class="gerister-box"> 
             <h2 class="rigester-text">ثبت نام</h2>
-            <input class="input-user username-input" placeholder="نام کاربری" required>
-            <input type="email" class="input-user email" placeholder="ایمیل" required>
-            <input type="password" class="input-user password-input" placeholder="رمز عبور" required minlength="6">
-            <input type="password" class="input-user password-confirm-input" placeholder="تکرار رمز عبور">
+            
+            <div class="input-box">
+                <input class="input-user username-input" placeholder="نام کاربری" required>
+                <span class="error-msg"></span>
+            </div>
+            
+            <div class="input-box">
+                <input type="email" class="input-user email" placeholder="ایمیل" required>
+                <span class="error-msg"></span>
+            </div>
+            
+            <div class="input-box">
+                <input type="password" class="input-user password-input" placeholder="رمز عبور" required minlength="8">
+                <span class="error-msg"></span>
+            </div>
+            
+            <div class="input-box">
+                <input type="password" class="input-user password-confirm-input" placeholder="تکرار رمز عبور">
+                <span class="error-msg"></span>
+            </div>
+            
+
             <div class="select-box">
-                <select name="دسته بندی" id="EmployerRoFreelancer">
-                    <option value="" disabled selected id="hesab">نوع حساب</option>
-                    <option value="freelacer" id="freelacer">فریلنسر</option>
-                    <option value="employer" id="employer">کارفرما</option>
-                </select>
-                <select id="city">
-                    <option value="" disabled selected class="ostan">استان</option>
-                    <option value="a-sh"> آذرباجان شرقی</option>
-                    <option value="a-gh">آذرباجان قربی</option>
-                    <option value="ardebil">اردبیل</option>
-                    <option value="esfahan">اصفهان</option>
-                    <option value="alborz">البرز</option>
-                    <option value="ilam">ایلام</option>
-                    <option value="boshehr">بوشهر</option>
-                    <option value="tehran">تهران</option>
-                    <option value="char&bakh">چهارمحال و بختیاری</option>
-                    <option value="kh-g">خراسان جنوبی</option>
-                    <option value="kh-r">خراسان رضوی</option>
-                    <option value="kh-sh">خراسان شمالی</option>
-                    <option value="khozestal">خوزستان</option>
-                    <option value="zanjan">زنجان</option>
-                    <option value="semnan">سمنان</option>
-                    <option value="sis&bal">سیستان و بلوچستان</option>
-                    <option value="fars">فارس</option>
-                    <option value="ghazvin">قزوین</option>
-                    <option value="ghom">قم</option>
-                    <option value="kordestan">کردستان</option>
-                    <option value="kerman">کرمان</option>
-                    <option value="kermanshah">کرمانشاه</option>
-                    <option value="koh&bor">کهکیلویه و بیراحمد</option>
-                    <option value="golestan">گلستان</option>
-                    <option value="gilan">گیلان</option>
-                    <option value="lorestan">لرستان</option>
-                    <option value="mazandaran">مازندران</option>
-                    <option value="markazi">مرکزی</option>
-                    <option value="hormozgan">هرمزگان</option>
-                    <option value="hamedan">همدان</option>
-                    <option value="yazd">یزد</option>
-                </select>
+
+                <div class="EmployerRoFreelancer-box">
+                    <select name="دسته بندی" id="EmployerRoFreelancer">
+                        <option value="" disabled selected id="hesab">نوع حساب</option>
+                        <option value="freelacer" id="freelacer">فریلنسر</option>
+                        <option value="employer" id="employer">کارفرما</option>
+                    </select>
+                    <span class="error-msg"></span>
+                </div>
+
+                <div class="city-box">
+                    <select id="city">
+                        <option value="" disabled selected class="ostan">استان</option>
+                        <option value="a-sh"> آذرباجان شرقی</option>
+                        <option value="a-gh">آذرباجان قربی</option>
+                        <option value="ardebil">اردبیل</option>
+                        <option value="esfahan">اصفهان</option>
+                        <option value="alborz">البرز</option>
+                        <option value="ilam">ایلام</option>
+                        <option value="boshehr">بوشهر</option>
+                        <option value="tehran">تهران</option>
+                        <option value="char&bakh">چهارمحال و بختیاری</option>
+                        <option value="kh-g">خراسان جنوبی</option>
+                        <option value="kh-r">خراسان رضوی</option>
+                        <option value="kh-sh">خراسان شمالی</option>
+                        <option value="khozestal">خوزستان</option>
+                        <option value="zanjan">زنجان</option>
+                        <option value="semnan">سمنان</option>
+                        <option value="sis&bal">سیستان و بلوچستان</option>
+                        <option value="fars">فارس</option>
+                        <option value="ghazvin">قزوین</option>
+                        <option value="ghom">قم</option>
+                        <option value="kordestan">کردستان</option>
+                        <option value="kerman">کرمان</option>
+                        <option value="kermanshah">کرمانشاه</option>
+                        <option value="koh&bor">کهکیلویه و بیراحمد</option>
+                        <option value="golestan">گلستان</option>
+                        <option value="gilan">گیلان</option>
+                        <option value="lorestan">لرستان</option>
+                        <option value="mazandaran">مازندران</option>
+                        <option value="markazi">مرکزی</option>
+                        <option value="hormozgan">هرمزگان</option>
+                        <option value="hamedan">همدان</option>
+                        <option value="yazd">یزد</option>
+                    </select>
+                    <span class="error-msg"></span>
+                </div>
+
             </div>
             <button type="submit" class="register-button">ثبت نام</button>
             <!-- -job title     -job title  -->
