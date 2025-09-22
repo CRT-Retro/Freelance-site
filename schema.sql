@@ -3,8 +3,8 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
-    email TEXT UNIQUE NOT NULL CHECK(email LIKE '%_@__%.__%'),
-    password_hash TEXT NOT NULL CHECK(length(password_hash) >= 6),
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'freelancer' CHECK (role IN ('freelancer','employer','admin')),
     photo TEXT,
     job_title TEXT,

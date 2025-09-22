@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import re
 
 DB_PATH = "database.db"
 SCHEMA_FILE = "schema.sql"
@@ -19,6 +20,9 @@ USER_SKILLS = {
     'mohammad': ['Python', 'SQL']  # مثال مهارت برای کاربر جدید
 }
 
+# الگوی ساده برای اعتبارسنجی ایمیل
+EMAIL_REGEX = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+
 def create_database():
     # حذف دیتابیس قدیمی
     if os.path.exists(DB_PATH):
@@ -36,13 +40,36 @@ def create_database():
             conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # 2️⃣ درج کاربران از seed.sql
+        cursor = conn.cursor()
+
+        # 2️⃣ درج کاربران از seed.sql با اعتبارسنجی ایمیل
         with open(SEED_FILE, "r", encoding="utf-8") as f:
-            conn.executescript(f.read())
-        print("Users inserted successfully!")
+            lines = f.readlines()
+
+        for line in lines:
+            line = line.strip()
+            if line.startswith("INSERT INTO users"):
+                values_str = line[line.find("VALUES")+6:].strip().rstrip(';')
+                users_list = values_str.split("),")
+                for user_str in users_list:
+                    user_str = user_str.strip().lstrip('(').rstrip(')')
+                    fields = [f.strip().strip("'") for f in user_str.split(",")]
+                    if len(fields) < 6:
+                        print(f"❌ Skipping invalid user entry: {user_str}")
+                        continue
+                    username, email, password_hash, role, job_title, location = fields
+                    # اعتبارسنجی ایمیل
+                    if not re.match(EMAIL_REGEX, email):
+                        print(f"❌ Invalid email: {email}")
+                        continue
+                    cursor.execute(
+                        "INSERT INTO users (username, email, password_hash, role, job_title, location) VALUES (?, ?, ?, ?, ?, ?)",
+                        (username, email, password_hash, role, job_title, location)
+                    )
+        conn.commit()
+        print("✅ Users inserted successfully!")
 
         # 3️⃣ درج مهارت‌ها با Python
-        cursor = conn.cursor()
         for username, skills in USER_SKILLS.items():
             cursor.execute("SELECT id FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
@@ -65,7 +92,8 @@ def create_database():
         print("Error:", e)
     finally:
         conn.close()
-        print("✅ Database ready with users, skills, views, and indexes!")
+
+    print("✅ Database ready with users, skills, views, and indexes!")
 
 if __name__ == "__main__":
     create_database()
