@@ -127,12 +127,20 @@ def create_database():
             conn.executescript(f.read())
         print("Views and indexes created successfully!")
 
+        # 7️⃣ پر کردن جدول FTS
+        cursor.execute("DELETE FROM users_fts")  # پاک کردن داده‌های قدیمی در صورت وجود
+        cursor.execute(
+            "INSERT INTO users_fts (rowid, username, job_title) SELECT id, username, job_title FROM users"
+        )
+        conn.commit()
+        print("FTS table populated successfully!")
+
     except Exception as e:
         print("Error:", e)
     finally:
         conn.close()
 
-    print("✅ Database ready with users, skills, reviews, favorites, views, and indexes!")
+    print("✅ Database ready with users, skills, reviews, favorites, views, indexes, and FTS!")
 
 if __name__ == "__main__":
     create_database()

@@ -28,3 +28,11 @@ CREATE INDEX IF NOT EXISTS idx_skills_skill ON skills(skill);
 -- Index برای جستجوی سریع روی favorites
 CREATE INDEX IF NOT EXISTS idx_favorites_user_id ON favorites(user_id);
 CREATE INDEX IF NOT EXISTS idx_favorites_favorite_user_id ON favorites(favorite_user_id);
+
+-- جدول مجازی FTS برای جستجوی سریع روی نام کاربر و عنوان شغلی
+CREATE VIRTUAL TABLE IF NOT EXISTS users_fts USING fts5(
+    username,
+    job_title,
+    content='users',
+    content_rowid='id'
+);
