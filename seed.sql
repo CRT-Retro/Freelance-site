@@ -11,3 +11,10 @@ VALUES
 ('radman', 'radman@gmail.com', '123456789', 'admin', 'Database Admin', 'Zanjan'),
 ('ronika', 'ronika@gmail.com', '123456789', 'admin', 'Backend Admin', 'Tehran'),
 ('sedigh', 'sedigh@gmail.com', '123456789', 'admin', 'Frontend Admin', 'Kerman');
+
+-- نمونه favoriteها برای تست
+INSERT INTO favorites (user_id, favorite_user_id) VALUES
+(1, 2),
+(1, 3),
+(2, 3),
+(3, 1);

@@ -28,8 +28,14 @@ SAMPLE_REVIEWS = [
     ('radman', 'ronika', 5, 'Excellent skills!')
 ]
 
+# نمونه favoriteها (user_id: [favorite_user_id])
+USER_FAVORITES = {
+    1: [2, 3],
+    2: [3],
+    3: [1]
+}
+
 def load_seed_users(file_path):
-    """Load users from seed.sql and return as list of dicts."""
     users = []
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
@@ -52,7 +58,6 @@ def load_seed_users(file_path):
     return users
 
 def create_database():
-    # حذف دیتابیس قدیمی
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
         print("Old database deleted!")
@@ -68,7 +73,7 @@ def create_database():
             conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # 2️⃣ درج کاربران از seed.sql با اعتبارسنجی
+        # 2️⃣ درج کاربران با اعتبارسنجی
         users = load_seed_users(SEED_FILE)
         cursor = conn.cursor()
         for user in users:
@@ -80,7 +85,7 @@ def create_database():
         conn.commit()
         print("Users inserted successfully!")
 
-        # 3️⃣ درج مهارت‌ها با Python
+        # 3️⃣ درج مهارت‌ها
         for username, skills in USER_SKILLS.items():
             cursor.execute("SELECT id FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
@@ -107,7 +112,17 @@ def create_database():
         conn.commit()
         print("Sample reviews inserted successfully!")
 
-        # 5️⃣ ایجاد View و Index
+        # 5️⃣ درج favoriteها
+        for user_id, fav_list in USER_FAVORITES.items():
+            for fav_id in fav_list:
+                cursor.execute(
+                    "INSERT INTO favorites (user_id, favorite_user_id) VALUES (?, ?)",
+                    (user_id, fav_id)
+                )
+        conn.commit()
+        print("Favorites inserted successfully!")
+
+        # 6️⃣ ایجاد View و Index
         with open(VIEWS_INDEXES_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Views and indexes created successfully!")
@@ -117,7 +132,7 @@ def create_database():
     finally:
         conn.close()
 
-    print("✅ Database ready with users, skills, reviews, views, and indexes!")
+    print("✅ Database ready with users, skills, reviews, favorites, views, and indexes!")
 
 if __name__ == "__main__":
     create_database()

@@ -24,3 +24,7 @@ CREATE INDEX IF NOT EXISTS idx_skills_user_id ON skills(user_id);
 
 -- Index برای جستجوی سریع روی مهارت
 CREATE INDEX IF NOT EXISTS idx_skills_skill ON skills(skill);
+
+-- Index برای جستجوی سریع روی favorites
+CREATE INDEX IF NOT EXISTS idx_favorites_user_id ON favorites(user_id);
+CREATE INDEX IF NOT EXISTS idx_favorites_favorite_user_id ON favorites(favorite_user_id);
