@@ -58,6 +58,7 @@ def load_seed_users(file_path):
     return users
 
 def create_database():
+    # حذف دیتابیس قدیمی
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
         print("Old database deleted!")
@@ -67,15 +68,15 @@ def create_database():
     conn = sqlite3.connect(DB_PATH)
     try:
         conn.execute("PRAGMA foreign_keys = ON;")
+        cursor = conn.cursor()
 
         # 1️⃣ ایجاد جداول
         with open(SCHEMA_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # 2️⃣ درج کاربران با اعتبارسنجی
+        # 2️⃣ درج کاربران از seed.sql با اعتبارسنجی
         users = load_seed_users(SEED_FILE)
-        cursor = conn.cursor()
         for user in users:
             if validate_user(user):
                 cursor.execute(
@@ -85,7 +86,7 @@ def create_database():
         conn.commit()
         print("Users inserted successfully!")
 
-        # 3️⃣ درج مهارت‌ها
+        # 3️⃣ درج مهارت‌ها با جلوگیری از تکراری
         for username, skills in USER_SKILLS.items():
             cursor.execute("SELECT id FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
@@ -93,7 +94,7 @@ def create_database():
                 user_id = result[0]
                 for skill in skills:
                     cursor.execute(
-                        "INSERT INTO skills (user_id, skill) VALUES (?, ?)",
+                        "INSERT OR IGNORE INTO skills (user_id, skill) VALUES (?, ?)",
                         (user_id, skill)
                     )
         conn.commit()
@@ -112,13 +113,14 @@ def create_database():
         conn.commit()
         print("Sample reviews inserted successfully!")
 
-        # 5️⃣ درج favoriteها
+        # 5️⃣ درج favoriteها بدون تکراری
         for user_id, fav_list in USER_FAVORITES.items():
             for fav_id in fav_list:
-                cursor.execute(
-                    "INSERT INTO favorites (user_id, favorite_user_id) VALUES (?, ?)",
-                    (user_id, fav_id)
-                )
+                if user_id != fav_id:  # کاربر نمی‌تواند خودش را favorite کند
+                    cursor.execute(
+                        "INSERT OR IGNORE INTO favorites (user_id, favorite_user_id) VALUES (?, ?)",
+                        (user_id, fav_id)
+                    )
         conn.commit()
         print("Favorites inserted successfully!")
 
@@ -128,7 +130,7 @@ def create_database():
         print("Views and indexes created successfully!")
 
         # 7️⃣ پر کردن جدول FTS
-        cursor.execute("DELETE FROM users_fts")  # پاک کردن داده‌های قدیمی در صورت وجود
+        cursor.execute("DELETE FROM users_fts")  # پاک کردن داده‌های قدیمی
         cursor.execute(
             "INSERT INTO users_fts (rowid, username, job_title) SELECT id, username, job_title FROM users"
         )
