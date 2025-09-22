@@ -1,7 +1,6 @@
 PRAGMA foreign_keys = ON;
 
-INSERT INTO users (username, email, password_hash, role, job_title, location)
-VALUES
+INSERT INTO users (username, email, password_hash, role, job_title, location) VALUES
 ('negin', 'negin@gmail.com', '123456789', 'freelancer', 'Backend Developer', 'Tehran'),
 ('sadra', 'sadra@gmail.com', '123456789', 'freelancer', 'Data Engineer', 'Tehran'),
 ('ali', 'ali@gmail.com', '123456789', 'freelancer', 'Data Analyst', 'Tehran'),

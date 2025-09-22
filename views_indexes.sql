@@ -1,10 +1,6 @@
--- View برای ترکیب کاربران و مهارت‌ها
+-- View ترکیب کاربران و مهارت‌ها
 CREATE VIEW IF NOT EXISTS user_skills_view AS
-SELECT u.id AS user_id,
-       u.username,
-       u.job_title,
-       u.location,
-       s.skill
+SELECT u.id AS user_id, u.username, u.job_title, u.location, s.skill
 FROM users u
 LEFT JOIN skills s ON u.id = s.user_id;
 

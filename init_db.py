@@ -65,8 +65,7 @@ def create_database():
         print("Error:", e)
     finally:
         conn.close()
-
-    print("✅ Database ready with users, skills, views, and indexes!")
+        print("✅ Database ready with users, skills, views, and indexes!")
 
 if __name__ == "__main__":
     create_database()
