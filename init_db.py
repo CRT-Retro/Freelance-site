@@ -1,6 +1,6 @@
 import sqlite3
 import os
-import re
+from validate_users import validate_user
 
 DB_PATH = "database.db"
 SCHEMA_FILE = "schema.sql"
@@ -20,8 +20,31 @@ USER_SKILLS = {
     'mohammad': ['Python', 'SQL']  # مثال مهارت برای کاربر جدید
 }
 
-# الگوی ساده برای اعتبارسنجی ایمیل
-EMAIL_REGEX = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+def load_seed_users(file_path):
+    """Load users from seed.sql and return as list of dicts."""
+    users = []
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    # جدا کردن هر خط INSERT
+    insert_statements = [stmt.strip() for stmt in content.split('VALUES') if stmt.strip()]
+    if len(insert_statements) > 1:
+        values_part = insert_statements[1]
+        # حذف پرانتزهای اضافی و ; آخر
+        values_part = values_part.strip().rstrip(';')
+        entries = values_part.split('),')
+        for entry in entries:
+            entry = entry.replace('(', '').replace(')', '').replace("'", "")
+            parts = [p.strip() for p in entry.split(',')]
+            user = {
+                'username': parts[0],
+                'email': parts[1],
+                'password_hash': parts[2],
+                'role': parts[3],
+                'job_title': parts[4],
+                'location': parts[5]
+            }
+            users.append(user)
+    return users
 
 def create_database():
     # حذف دیتابیس قدیمی
@@ -40,34 +63,17 @@ def create_database():
             conn.executescript(f.read())
         print("Tables created successfully!")
 
+        # 2️⃣ درج کاربران از seed.sql با اعتبارسنجی
+        users = load_seed_users(SEED_FILE)
         cursor = conn.cursor()
-
-        # 2️⃣ درج کاربران از seed.sql با اعتبارسنجی ایمیل
-        with open(SEED_FILE, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-
-        for line in lines:
-            line = line.strip()
-            if line.startswith("INSERT INTO users"):
-                values_str = line[line.find("VALUES")+6:].strip().rstrip(';')
-                users_list = values_str.split("),")
-                for user_str in users_list:
-                    user_str = user_str.strip().lstrip('(').rstrip(')')
-                    fields = [f.strip().strip("'") for f in user_str.split(",")]
-                    if len(fields) < 6:
-                        print(f"❌ Skipping invalid user entry: {user_str}")
-                        continue
-                    username, email, password_hash, role, job_title, location = fields
-                    # اعتبارسنجی ایمیل
-                    if not re.match(EMAIL_REGEX, email):
-                        print(f"❌ Invalid email: {email}")
-                        continue
-                    cursor.execute(
-                        "INSERT INTO users (username, email, password_hash, role, job_title, location) VALUES (?, ?, ?, ?, ?, ?)",
-                        (username, email, password_hash, role, job_title, location)
-                    )
+        for user in users:
+            if validate_user(user):
+                cursor.execute(
+                    "INSERT INTO users (username, email, password_hash, role, job_title, location) VALUES (?, ?, ?, ?, ?, ?)",
+                    (user['username'], user['email'], user['password_hash'], user['role'], user['job_title'], user['location'])
+                )
         conn.commit()
-        print("✅ Users inserted successfully!")
+        print("Users inserted successfully!")
 
         # 3️⃣ درج مهارت‌ها با Python
         for username, skills in USER_SKILLS.items():
