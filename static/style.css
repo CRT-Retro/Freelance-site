@@ -52,7 +52,7 @@ html {
 }
 
 
-h1,h2,h3,h3,h4,h5,h6,p,a,input,select,option
+h1,h2,h3,h3,h4,h5,h6,p,a,input,select,option,button
 {
     font-family: bon;
     
@@ -72,7 +72,7 @@ body
     background-color: #fff;
 } */
 
-button,a,select
+button,a,select,input
 {
     transition: all 0.2s ease;
 }
@@ -791,7 +791,7 @@ footer
 .gerister-box
 {
     display: flex;
-    gap: 2vw;
+    gap: 1.5vw;
     flex-direction: column;
     align-items: center;
     margin: 2vw 5vw 0vw 5vw;
@@ -828,6 +828,15 @@ footer
     outline: none;
 }
 
+.input-user.error
+{
+    border: 2px solid #ef3054;
+}
+.input-user.success 
+{
+  border: 2px solid #37ff8b;
+}
+
 .rigester-text
 {
     color: #C2C8E8;
@@ -855,17 +864,17 @@ option
 }
 
 /* select option {
-  scrollbar-width: none; برای فایرفاکس
+  scrollbar-width: none;
 }
 
 select option::-webkit-scrollbar {
-  display: none; برای کروم و سافاری
+  display: none; 
 } */
 
-::-webkit-scrollbar {
-  width: 10px;              /* عرض اسکرول‌بار */
-  height: 10px;             /* برای اسکرول افقی */
-}
+/* ::-webkit-scrollbar {
+  width: 10px;              
+  height: 10px;             
+} */
 
 .select-box
 {
@@ -893,6 +902,24 @@ select:hover
     /* direction:unset; */
 }
 
+#city.error
+{
+    border: 2px solid #ef3054;
+}
+#EmployerRoFreelancer.error 
+{
+  border: 2px solid #ef3054;
+}
+#city.success 
+{
+  border: 2px solid #37ff8b;
+}
+#EmployerRoFreelancer.success 
+{
+  border: 2px solid #37ff8b;
+}
+
+
 .register-cantiner
 {
     display: flex;
@@ -902,11 +929,12 @@ select:hover
     margin-bottom: 2vw;
 }
 
-.gerister-button
+.register-button
 {
     color: white;
     background-color: #476CFF;
     padding: 0.5vw 2vw;
+    border: none;
     border-radius: 0.5vw;
     font-size: 1.5vw;
 }
@@ -921,9 +949,74 @@ select:hover
     color: #476CFF;
 }
 
-.gerister-button:hover
+.register-button:hover
 {
     background-color: #6a88ff;
     transform: scale(1.05);
 }
 
+.filters-box
+{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    gap: 1vw;
+    margin-top: 5vw;
+    margin-right: 15vw;
+    
+}
+
+.filters-text-button
+{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    font-family: bon-black;
+    font-size: 1.5vw;
+    color: #E9F1F7;
+    background-color: #021B3A;
+    border: none;
+    border-radius: 1.2vw;
+    padding: 1vw 0.5vw;
+    gap: 1vw;
+}
+.filter-items
+{
+    display: flex;
+    align-items: center;
+    gap: 0.5vw;
+    flex-direction: row-reverse;
+}
+.search-filter
+{
+    background-color: #021B3A;
+    font-size: 1.2vw;
+    padding: 0.6vw 1vw;
+    border: none;
+    border-radius: 0.6vw;
+}
+.search-filter::placeholder
+{
+    color: #616582;
+}
+.filter-text-button
+{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    font-family: bon-bold;
+    font-size: 1.2vw;
+    color: #E9F1F7;
+    background-color: #021B3A;
+    border: none;
+    border-radius: 1vw;
+    padding: 0.6vw 0vw;
+    gap: 0.7vw;
+}
+
+.filter-group-item-arrow
+{
+    rotate: 270deg;
+}
