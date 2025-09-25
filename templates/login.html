@@ -25,8 +25,16 @@
         <div class="register-cantiner">
         <div class="gerister-box"> 
             <h2 class="rigester-text">ورود</h2>
-            <input type="email" class="input-user email" placeholder="ایمیل" required>
-            <input type="password" class="input-user password-input" placeholder="رمز عبور" required minlength="6">
+            
+            <div class="input-box">
+                <input type="email" class="input-user email" placeholder="ایمیل" required>
+                <span class="error-msg"></span>
+            </div>
+            
+            <div class="input-box">
+                <input type="password" class="input-user password-input" placeholder="رمز عبور" required minlength="8">
+                <span class="error-msg"></span>
+            </div>
   
             <button type="submit" class="register-button">ورود</button>
             <!-- -job title     -job title  -->
@@ -39,6 +47,6 @@
 
         
 
-
+    <script src="../static/app.js"></script>
 </body>
 </html>

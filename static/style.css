@@ -52,7 +52,7 @@ html {
 }
 
 
-h1,h2,h3,h3,h4,h5,h6,p,a,input,select,option,button
+h1,h2,h3,h3,h4,h5,h6,p,a,input,select,option,button,span
 {
     font-family: bon;
     
@@ -72,7 +72,7 @@ body
     background-color: #fff;
 } */
 
-button,a,select,input
+button,a,select,input,span
 {
     transition: all 0.2s ease;
 }
@@ -785,13 +785,14 @@ footer
     display: flex;
     justify-content: center;
     background: url(../static/background/bg.png) no-repeat;
-    background-position: center;
     background-size:cover;
+    background-position:center;
+    /* background-size:cover; */
 }
 .gerister-box
 {
     display: flex;
-    gap: 1.5vw;
+    gap: 1vw;
     flex-direction: column;
     align-items: center;
     margin: 2vw 5vw 0vw 5vw;
@@ -799,12 +800,12 @@ footer
     background-color: #00072d57;
     border-radius: 1.5vw;
     border: solid #d9d9d910;
-    width: 20vw;
+    /* width: 20vw; */
 
     backdrop-filter: blur(100);
     /* height: 30vw; */
-    
 }
+
 
 .input-user
 {
@@ -816,6 +817,7 @@ footer
     color: #C2C8E8;
     border: none;
     font-family: bon-semibold;
+    font-size: 1vw;
     padding-right: 1vw;
 }
 .input-user::placeholder
@@ -830,18 +832,24 @@ footer
 
 .input-user.error
 {
-    border: 2px solid #ef3054;
+    border: 0.2vw solid #ef3054;
 }
 .input-user.success 
 {
-  border: 2px solid #37ff8b;
+    border: 0.2vw solid #37ff8b;
+}
+
+.input-box
+{
+    display: flex;
+    flex-direction: column;
 }
 
 .rigester-text
 {
     color: #C2C8E8;
     font-family: bon-extrabold;
-    font-size:xx-large;
+    font-size:2.5vw;
 }
 select
 {
@@ -880,11 +888,19 @@ select option::-webkit-scrollbar {
 {
     display: flex;
     gap: 1vw;
+    margin-bottom: 1vw;
 }
 
 #city
 {
     width: 4.4vw;
+    font-size: 0.9vw;
+    text-align: center;
+}
+.city-box
+{
+    display: flex;
+    flex-direction: column;
 }
 
 #hesab
@@ -906,9 +922,20 @@ select:hover
 {
     border: 2px solid #ef3054;
 }
+#EmployerRoFreelancer
+{
+    font-size: 0.9vw;
+    text-align: center;
+
+}
 #EmployerRoFreelancer.error 
 {
   border: 2px solid #ef3054;
+}
+.EmployerRoFreelancer-box
+{
+    display: flex;
+    flex-direction: column; 
 }
 #city.success 
 {
@@ -918,7 +945,13 @@ select:hover
 {
   border: 2px solid #37ff8b;
 }
-
+.error-msg {
+    color: #ef3054;
+    font-size: 0.8vw;
+    margin-top: 0.3vw;
+    margin-right: 0.5vw;
+    display: block;
+}
 
 .register-cantiner
 {
@@ -1019,4 +1052,124 @@ select:hover
 .filter-group-item-arrow
 {
     rotate: 270deg;
+}
+
+@media screen and (max-width: 750px)
+{
+
+    .register-cantiner
+    {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 25vw;
+        margin-top: 10vw;
+    }
+
+    .gerister-box
+    {
+        display: flex;
+        gap: 5vw;
+        flex-direction: column;
+        align-items: center;
+        margin: 2vw 5vw 3vw 5vw;
+        padding: 2vw 2.5vw 12vw 2.5vw;
+        background-color: #00072d57;
+        border-radius: 5vw;
+        border: solid #d9d9d910;
+        width: 80vw;
+
+        backdrop-filter: blur(100);
+        /* height: 15vw; */
+        
+    }
+
+    .rigester-text
+{
+    color: #C2C8E8;
+    font-family: bon-extrabold;
+    font-size:10vw;
+}
+
+.input-user
+{
+    width: 70vw;    
+    height: 10vw;
+    padding: 0.5vw;
+    border-radius: 3vw;
+    background-color: #00142D;
+    color: #C2C8E8;
+    border: none;
+    font-family: bon-semibold;
+    font-size: 4vw;
+    padding-right: 4vw;
+}
+
+.select-box
+{
+    display: flex;
+    gap: 5vw;
+    margin-bottom: 1vw;
+}
+
+#EmployerRoFreelancer
+{
+    font-size: 4vw;
+    border-radius: 2vw;
+    padding: 3vw;
+    text-align: center;
+}
+
+#city
+{
+    width: 25vw;
+    font-size: 4vw;
+    border-radius: 2vw;
+    padding: 3vw;
+    text-align: center;
+
+
+}
+
+.register-button
+{
+    padding: 2vw 4vw;
+    border-radius: 3vw;
+    font-size: 5vw;
+}
+
+
+#city.error
+{
+    border: 0.5 solid #ef3054;
+}
+#EmployerRoFreelancer.error 
+{
+  border: 0.5vw solid #ef3054;
+}
+.input-user.error
+{
+    border: 0.5vw solid #ef3054;
+}
+.input-user.success 
+{
+    border: 0.5vw solid #37ff8b;
+}
+#city.success 
+{
+  border: 0.5vw solid #37ff8b;
+}
+#EmployerRoFreelancer.success 
+{
+  border: 0.5vw solid #37ff8b;
+}
+.error-msg {
+    color: #ef3054;
+    font-size: 3vw;
+    margin-top: 0.3vw;
+    margin-right: 0.5vw;
+    display: block;
+}
+
 }
