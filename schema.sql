@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS favorites (
     CHECK(user_id != favorite_user_id)
 );
 
--- Indexها
+-- Indexes
 CREATE UNIQUE INDEX IF NOT EXISTS idx_skills_user_skill ON skills(user_id, skill);
 CREATE INDEX IF NOT EXISTS idx_portfolios_user ON portfolios(user_id);
 CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);

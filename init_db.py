@@ -7,7 +7,7 @@ SCHEMA_FILE = "schema.sql"
 SEED_FILE = "seed.sql"
 VIEWS_INDEXES_FILE = "views_indexes.sql"
 
-# مهارت‌ها برای هر کاربر
+# Skills for each user
 USER_SKILLS = {
     'negin': ['Python', 'Flask', 'Django'],
     'sadra': ['Python', 'Database', 'Pandas'],
@@ -20,7 +20,7 @@ USER_SKILLS = {
     'mohammad': ['Python', 'SQL']
 }
 
-# نمونه داده برای Reviews
+# Sample data for Reviews
 SAMPLE_REVIEWS = [
     ('negin', 'sadra', 5, 'Great teamwork!'),
     ('ali', 'mohammad', 4, 'Good collaboration.'),
@@ -28,7 +28,7 @@ SAMPLE_REVIEWS = [
     ('radman', 'ronika', 5, 'Excellent skills!')
 ]
 
-# نمونه favoriteها (user_id: [favorite_user_id])
+# Example favorites (user_id: [favorite_user_id])
 USER_FAVORITES = {
     1: [2, 3],
     2: [3],
@@ -58,7 +58,7 @@ def load_seed_users(file_path):
     return users
 
 def create_database():
-    # حذف دیتابیس قدیمی
+    # Delete the old database
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
         print("Old database deleted!")
@@ -70,12 +70,12 @@ def create_database():
         conn.execute("PRAGMA foreign_keys = ON;")
         cursor = conn.cursor()
 
-        # 1️⃣ ایجاد جداول
+        #1️⃣ Creating tables
         with open(SCHEMA_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Tables created successfully!")
 
-        # 2️⃣ درج کاربران از seed.sql با اعتبارسنجی
+        #2️⃣ Insert users from seed.sql with validation
         users = load_seed_users(SEED_FILE)
         for user in users:
             if validate_user(user):
@@ -86,7 +86,7 @@ def create_database():
         conn.commit()
         print("Users inserted successfully!")
 
-        # 3️⃣ درج مهارت‌ها با جلوگیری از تکراری
+        #3️⃣ Incorporating skills while avoiding duplication
         for username, skills in USER_SKILLS.items():
             cursor.execute("SELECT id FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
@@ -100,7 +100,7 @@ def create_database():
         conn.commit()
         print("Skills inserted successfully!")
 
-        # 4️⃣ درج نمونه review
+        #4️⃣ Insert sample review
         for reviewer_name, reviewed_name, rating, comment in SAMPLE_REVIEWS:
             cursor.execute("SELECT id FROM users WHERE username=?", (reviewer_name,))
             reviewer_id = cursor.fetchone()[0]
@@ -113,10 +113,10 @@ def create_database():
         conn.commit()
         print("Sample reviews inserted successfully!")
 
-        # 5️⃣ درج favoriteها بدون تکراری
+        #5️⃣ Insert favorites without duplicates
         for user_id, fav_list in USER_FAVORITES.items():
             for fav_id in fav_list:
-                if user_id != fav_id:  # کاربر نمی‌تواند خودش را favorite کند
+                if user_id != fav_id:
                     cursor.execute(
                         "INSERT OR IGNORE INTO favorites (user_id, favorite_user_id) VALUES (?, ?)",
                         (user_id, fav_id)
@@ -124,13 +124,13 @@ def create_database():
         conn.commit()
         print("Favorites inserted successfully!")
 
-        # 6️⃣ ایجاد View و Index
+        #6️⃣ Creating Views and Indexes
         with open(VIEWS_INDEXES_FILE, "r", encoding="utf-8") as f:
             conn.executescript(f.read())
         print("Views and indexes created successfully!")
 
-        # 7️⃣ پر کردن جدول FTS
-        cursor.execute("DELETE FROM users_fts")  # پاک کردن داده‌های قدیمی
+        #7️⃣ Filling in the FTS table
+        cursor.execute("DELETE FROM users_fts")
         cursor.execute(
             "INSERT INTO users_fts (rowid, username, job_title) SELECT id, username, job_title FROM users"
         )

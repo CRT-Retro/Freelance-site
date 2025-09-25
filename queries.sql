@@ -1,4 +1,4 @@
--- نمایش کاربران و مهارت‌ها (هر مهارت یک ردیف)
+-- Display users and skills (one row for each skill)
 SELECT
   u.id   AS user_id,
   u.username,
@@ -9,7 +9,7 @@ FROM users u
 LEFT JOIN skills s ON u.id = s.user_id
 ORDER BY u.username, s.skill;
 
--- نمایش پروفایل هر کاربر با مهارت‌ها به صورت یکجا
+-- Display users and skills (one row for each skill)
 SELECT
   u.id,
   u.username,

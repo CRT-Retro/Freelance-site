@@ -12,7 +12,7 @@ VALUES
 ('ronika', 'ronika@gmail.com', '123456789', 'admin', 'Backend Admin', 'Tehran'),
 ('sedigh', 'sedigh@gmail.com', '123456789', 'admin', 'Frontend Admin', 'Kerman');
 
--- نمونه favoriteها برای تست
+-- Favorites samples for testing
 INSERT INTO favorites (user_id, favorite_user_id) VALUES
 (1, 2),
 (1, 3),
